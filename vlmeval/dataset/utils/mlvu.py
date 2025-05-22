@@ -183,7 +183,7 @@ def get_dimension_rating(data_path):
     result_dict = {}
     for idx, item in data.iterrows():
         if item['task_type'] not in result_dict:
-            result_dict[item['task_type']] = [0,0]
-        result_dict[item['task_type']][0] += int(item['score'])
-        result_dict[item['task_type']][1] += 1
+            result_dict[item['task_type']] = dict(sum_of_score=0, sum_of_questions=0)
+        result_dict[item['task_type']]['sum_of_score'] += int(item['score'])
+        result_dict[item['task_type']]['sum_of_questions'] += 1
     return result_dict

@@ -221,6 +221,7 @@ Please directly reply with your response to the only question.
 
         if not osp.exists(score_file):
             res = {} if not osp.exists(tmp_file) else load(tmp_file)
+            # print(f"--------------{tmp_file}----------------")
             res = {k: v for k, v in res.items() if model.fail_msg not in v}
 
             data = load(eval_file)

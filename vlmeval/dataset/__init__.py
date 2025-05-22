@@ -5,18 +5,15 @@ from .image_caption import ImageCaptionDataset
 from .image_yorn import ImageYORNDataset
 from .image_mcq import (
     ImageMCQDataset, MMMUDataset, CustomMCQDataset, MUIRDataset, GMAIMMBenchDataset, MMERealWorld, HRBenchDataset,
-    NaturalBenchDataset, WeMath, MMMUProDataset, VMCBenchDataset, MedXpertQA_MM_test, LEGO, VisuLogic, CVBench, TDBench,
-    CMMU_MCQ, PathMMU_VAL, PathMMU_TEST, MicroVQA, MicroBench, OmniMedVQA, MSEarthMCQ
+    NaturalBenchDataset, WeMath
 )
 from .image_mt import MMDUDataset
 from .image_vqa import (
-    ImageVQADataset, MathVision, OCRBench, MathVista, LLaVABench, VGRPBench, MMVet, MTVQADataset, TableVQABench,
-    CustomVQADataset, CRPE, MathVerse, OlympiadBench, QSpatial, VizWiz, MMNIAH, LogicVista, MME_CoT,
-    MMSci_Captioning, Physics_yale, TDBenchGrounding, WildDocBenchmark
+    ImageVQADataset, MathVision, OCRBench, MathVista, LLaVABench, MMVet, MTVQADataset, TableVQABench,
+    CustomVQADataset, CRPE, MathVerse, OlympiadBench, QSpatial, VizWiz, MMNIAH, LogicVista
 )
 
 from .image_ccocr import CCOCRDataset
-from .image_shortqa import ImageShortQADataset, PathVQA_VAL, PathVQA_TEST
 from .text_mcq import CustomTextMCQDataset, TextMCQDataset
 
 from .vcr import VCRDataset
@@ -24,42 +21,26 @@ from .mmlongbench import MMLongBench
 from .dude import DUDE
 from .slidevqa import SlideVQA
 from .vl_rewardbench import VLRewardBench
-from .vlm2bench import VLM2Bench
-from .spatial457 import Spatial457
-from .charxiv import CharXiv
 
 from .mmbench_video import MMBenchVideo
 from .videomme import VideoMME
 from .mvbench import MVBench, MVBench_MP4
-from .tamperbench import MVTamperBench
-from .miabench import MIABench
 from .mlvu import MLVU, MLVU_MCQ, MLVU_OpenEnded
+from .halludataset import Halludataset
 from .tempcompass import TempCompass, TempCompass_Captioning, TempCompass_MCQ, TempCompass_YorN
 from .longvideobench import LongVideoBench
 from .video_concat_dataset import ConcatVideoDataset
 from .mmgenbench import MMGenBench
 from .cgbench import CGBench_MCQ_Grounding_Mini, CGBench_OpenEnded_Mini, CGBench_MCQ_Grounding, CGBench_OpenEnded
-from .megabench import MEGABench
-from .moviechat1k import MovieChat1k
-from .video_mmlu import VideoMMLU_CAP, VideoMMLU_QA
-from .vdc import VDC
 
-from .worldsense import WorldSense
-from .qbench_video import QBench_Video, QBench_Video_MCQ, QBench_Video_VQA
-
+from .miabench import MIABench
 from .cmmmu import CMMMU
-from .emma import EMMADataset
 from .wildvision import WildVision
 from .mmmath import MMMath
 from .dynamath import Dynamath
-from .creation import CreationMMBenchDataset
-from .mmalignbench import MMAlignBench
 from .utils import *
 from .video_dataset_config import *
 from ..smp import *
-from .Omnidocbench.omnidocbench import OmniDocBench
-from .moat import MOAT
-from .mmifeval import MMIFEval
 
 
 class ConcatDataset(ImageBaseDataset):
@@ -71,7 +52,7 @@ class ConcatDataset(ImageBaseDataset):
         'MTL_MMBench_DEV': [
             'MMBench_dev_ar', 'MMBench_dev_cn', 'MMBench_dev_en',
             'MMBench_dev_pt', 'MMBench_dev_ru', 'MMBench_dev_tr'
-        ],
+        ]
     }
 
     def __init__(self, dataset):
@@ -149,29 +130,19 @@ class ConcatDataset(ImageBaseDataset):
 
 # Add new supported dataset class here
 IMAGE_DATASET = [
-    ImageCaptionDataset, ImageYORNDataset, ImageMCQDataset, ImageVQADataset,
-    MathVision, MMMUDataset, OCRBench, MathVista, LLaVABench, VGRPBench, MMVet,
-    MTVQADataset, TableVQABench, MMLongBench, VCRDataset, MMDUDataset, DUDE,
-    SlideVQA, MUIRDataset, CCOCRDataset, GMAIMMBenchDataset, MMERealWorld,
-    HRBenchDataset, CRPE, MathVerse, NaturalBenchDataset, MIABench,
-    OlympiadBench, WildVision, MMMath, QSpatial, Dynamath, MMGenBench, VizWiz,
-    MMNIAH, CMMMU, VLRewardBench, WeMath, LogicVista, MMMUProDataset,
-    CreationMMBenchDataset, ImageShortQADataset, MMAlignBench, OmniDocBench,
-    VLM2Bench, VMCBenchDataset, EMMADataset, MME_CoT, MOAT, MedXpertQA_MM_test,
-    LEGO, MMSci_Captioning, Physics_yale, MMIFEval, Spatial457, VisuLogic, CVBench,
-    CMMU_MCQ, PathVQA_VAL, PathVQA_TEST, PathMMU_VAL, PathMMU_TEST, TDBench, TDBenchGrounding,
-    MicroVQA, MicroBench, CharXiv, OmniMedVQA, WildDocBenchmark, MSEarthMCQ
+    ImageCaptionDataset, ImageYORNDataset, ImageMCQDataset, ImageVQADataset, MathVision,
+    MMMUDataset, OCRBench, MathVista, LLaVABench, MMVet, MTVQADataset, TableVQABench,
+    MMLongBench, VCRDataset, MMDUDataset, DUDE, SlideVQA, MUIRDataset, CCOCRDataset,
+    GMAIMMBenchDataset, MMERealWorld, HRBenchDataset, CRPE, MathVerse, NaturalBenchDataset,
+    MIABench, OlympiadBench, WildVision, MMMath, QSpatial, Dynamath, MMGenBench, VizWiz, MMNIAH,
+    CMMMU, VLRewardBench, WeMath, LogicVista
 ]
 
-
 VIDEO_DATASET = [
-    MMBenchVideo, VideoMME, MVBench, MVBench_MP4, MVTamperBench,
-    LongVideoBench, WorldSense, VDC, MovieChat1k, MEGABench,
-    MLVU, MLVU_MCQ, MLVU_OpenEnded,
+    MMBenchVideo, VideoMME, MVBench, MVBench_MP4, LongVideoBench,
+    MLVU, MLVU_MCQ, MLVU_OpenEnded, Halludataset,
     TempCompass, TempCompass_MCQ, TempCompass_Captioning, TempCompass_YorN,
-    CGBench_MCQ_Grounding_Mini, CGBench_OpenEnded_Mini, CGBench_MCQ_Grounding, CGBench_OpenEnded,
-    QBench_Video, QBench_Video_MCQ, QBench_Video_VQA,
-    VideoMMLU_CAP, VideoMMLU_QA
+    CGBench_MCQ_Grounding_Mini, CGBench_OpenEnded_Mini, CGBench_MCQ_Grounding, CGBench_OpenEnded
 ]
 
 TEXT_DATASET = [
@@ -184,7 +155,7 @@ CUSTOM_DATASET = [
 
 DATASET_COLLECTION = [ConcatDataset, ConcatVideoDataset]
 
-DATASET_CLASSES = IMAGE_DATASET + VIDEO_DATASET + TEXT_DATASET + CUSTOM_DATASET + DATASET_COLLECTION  # noqa: E501
+DATASET_CLASSES = IMAGE_DATASET + VIDEO_DATASET + TEXT_DATASET + CUSTOM_DATASET + DATASET_COLLECTION
 SUPPORTED_DATASETS = []
 for DATASET_CLS in DATASET_CLASSES:
     SUPPORTED_DATASETS.extend(DATASET_CLS.supported_datasets())
@@ -204,7 +175,7 @@ def DATASET_TYPE(dataset, *, default: str = 'MCQ') -> str:
 
     if 'openended' in dataset.lower():
         return 'VQA'
-    warnings.warn(f'Dataset {dataset} is a custom one and not annotated as `openended`, will treat as {default}. ')  # noqa: E501
+    warnings.warn(f'Dataset {dataset} is a custom one and not annotated as `openended`, will treat as {default}. ')
     return default
 
 
@@ -239,6 +210,7 @@ def build_dataset(dataset_name, **kwargs):
             return cls(dataset=dataset_name, **kwargs)
 
     warnings.warn(f'Dataset {dataset_name} is not officially supported. ')
+
     data_file = osp.join(LMUDataRoot(), f'{dataset_name}.tsv')
     if not osp.exists(data_file):
         warnings.warn(f'Data file {data_file} does not exist. Dataset building failed. ')
