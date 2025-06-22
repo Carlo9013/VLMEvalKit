@@ -1,0 +1,19 @@
+
+{
+    "model": {
+      "VideoChat2-HD": {
+        "class": "VideoChat2_HD",
+        "model_path": "OpenGVLab/VideoChat2_HD_stage4_Mistral_7B",
+        "temperature": 1,
+        "video_llm": true,
+        "nframe": 16
+      }
+    },
+    "data": {
+      "Halludataset": {
+        "class": "Halludataset",
+        "dataset": "Halludataset",
+        "nframe": 16
+      }
+    }  
+  }

@@ -1,0 +1,19 @@
+
+{
+  "model": {
+    "PLLaVA-7B": {
+      "class": "PLLaVA",
+      "model_path": "ermu2001/pllava-7b",
+      "temperature": 0.0,
+      "video_llm": true,
+      "nframe": 16
+    }
+  },
+  "data": {
+    "MMBench-Video": {
+      "class": "MMBenchVideo",
+      "dataset": "MMBench-Video",
+      "nframe": 16
+    }
+  }  
+}

@@ -1,0 +1,19 @@
+
+{
+    "model": {
+      "llava_video_qwen2_7b": {
+        "class": "LLaVA_OneVision",
+        "model_path": "lmms-lab/LLaVA-Video-7B-Qwen2",
+        "temperature": 1,
+        "video_llm": true,
+        "nframe": 64
+      }
+    },
+    "data": {
+      "Halludataset": {
+        "class": "Halludataset",
+        "dataset": "Halludataset",
+        "nframe": 64
+      }
+    }  
+  }

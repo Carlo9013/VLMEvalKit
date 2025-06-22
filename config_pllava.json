@@ -1,0 +1,19 @@
+
+{
+    "model": {
+      "PLLaVA-7B": {
+        "class": "PLLaVA",
+        "model_path": "ermu2001/pllava-7b",
+        "temperature": 0.0,
+        "video_llm": true,
+        "nframe": 16
+      }
+    },
+    "data": {
+      "Halludataset": {
+        "class": "Halludataset",
+        "dataset": "Halludataset",
+        "nframe": 16
+      }
+    }  
+  }
