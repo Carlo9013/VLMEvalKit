@@ -11,7 +11,6 @@ from ...smp import isimg, listinstr, get_rank_and_world_size
 from ...dataset import DATASET_TYPE
 from huggingface_hub import snapshot_download
 
-
 class PLLaVA(BaseModel):
 
     INSTALL_REQ = True

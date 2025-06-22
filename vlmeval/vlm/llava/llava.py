@@ -546,7 +546,8 @@ class LLaVA_OneVision(BaseModel):
         model.tie_weights()
 
         if "llava" in model_path.lower():
-            conv_mode = "qwen_1_5"
+            # conv_mode = "qwen_1_5"
+            conv_mode = "v1"
         if 'llava-video' in model_path.lower():
             self.nframe = 64
         else:
@@ -660,7 +661,12 @@ class LLaVA_OneVision(BaseModel):
             .half()
             .cuda()
         )
+        # print(frames.size())
         image_tensors.append(frames)
+        # print(f"Image_tensors: {image_tensors}")
+        # print(f"Image_tensors_shape: {len(image_tensors)}")
+        # print(self.conv_templates.keys())
+
 
         conv = copy.deepcopy(self.conv_templates[self.conv_template])
         conv.append_message(conv.roles[0], content)
@@ -671,7 +677,11 @@ class LLaVA_OneVision(BaseModel):
             prompt_question, self.tokenizer, self.IMAGE_TOKEN_INDEX, return_tensors="pt"
         )
         input_ids = input_ids.unsqueeze(0).cuda()
-        image_sizes = [frame.size for frame in video_frames]
+        # image_sizes = [frame.size for frame in video_frames]
+        image_sizes = [(frame.shape[2], frame.shape[1]) for frame in frames]
+
+        print("\n")
+        print(image_sizes)
         modalities = ["video"] * len(video_frames)
 
         stop_str = conv.sep if conv.sep_style != self.SeparatorStyle.TWO else conv.sep2

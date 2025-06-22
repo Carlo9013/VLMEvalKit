@@ -55,22 +55,59 @@ Score 5: Completely accurate with no errors or contradictions; presentation is c
 """  # noqa
 
 
+# def check_ans_with_model(pred, gt, model, item, dataset_name='MLVU_MCQ'):
+#     flag = False
+
+#     index = gt.index("(")  # noqa
+#     index2 = gt.index(")")  # noqa
+#     gt_option = gt[index + 1: index2]
+
+#     if ")" in pred:
+#         index3 = pred.index(")")
+#         pred = pred[index3 - 1: index3]
+#     if pred == gt_option:
+#         flag = True
+#     elif extract_answer_from_item(model, item, dataset_name)['opt'] == item['answer']:
+#         flag = True
+
+#     return flag
+
 def check_ans_with_model(pred, gt, model, item, dataset_name='MLVU_MCQ'):
     flag = False
 
-    index = gt.index("(")  # noqa
-    index2 = gt.index(")")  # noqa
-    gt_option = gt[index + 1: index2]
+    # 容错：将 pred 和 gt 转成字符串，避免 float 报错
+    try:
+        pred = str(pred)
+        gt = str(gt)
+    except Exception as e:
+        print(f"[Warning] Failed to convert pred or gt to string. pred={pred}, gt={gt}, error={e}")
+        return False
 
+    # 安全地提取 gt_option
+    try:
+        index = gt.index("(")
+        index2 = gt.index(")")
+        gt_option = gt[index + 1: index2]
+    except Exception as e:
+        print(f"[Warning] Ground truth format error: gt={gt}, error={e}")
+        return False
+
+    # 尝试从 pred 中提取类似 “A)” 的答案
     if ")" in pred:
-        index3 = pred.index(")")
-        pred = pred[index3 - 1: index3]
+        try:
+            index3 = pred.index(")")
+            pred = pred[index3 - 1: index3]
+        except Exception as e:
+            print(f"[Warning] Prediction format error: pred={pred}, error={e}")
+            return False
+
     if pred == gt_option:
         flag = True
-    elif extract_answer_from_item(model, item, dataset_name)['opt'] == item['answer']:
+    elif extract_answer_from_item(model, item, dataset_name).get('opt') == item.get('answer'):
         flag = True
 
     return flag
+
 
 
 def extract_scores_summary(text):

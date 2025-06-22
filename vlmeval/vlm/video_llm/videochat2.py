@@ -18,6 +18,9 @@ from ..base import BaseModel
 from ...smp import *
 from ...dataset import DATASET_TYPE
 
+import sys
+sys.path.append('/home/stud/xingyu/Ask_Anything')
+
 
 def get_prompt(conv):
     ret = conv.system + conv.sep
@@ -62,8 +65,9 @@ class VideoChat2_HD(BaseModel):
     VIDEO_LLM = True
 
     def __init__(self, model_path='OpenGVLab/VideoChat2_HD_stage4_Mistral_7B',
-                 root='./Ask-Anything', config_file='./configs/videochat2_hd.json',
+                 root='./Ask-Anything', config_file='./vlmeval/vlm/video_llm/configs/videochat2_hd.json',
                  **kwargs):
+        # VLMEvalKit/vlmeval/vlm/video_llm/configs/videochat2_hd.json
 
         from peft import get_peft_model, LoraConfig, TaskType
         self.config_file = config_file
@@ -76,10 +80,11 @@ class VideoChat2_HD(BaseModel):
 
         sys.path.append(osp.join(root, 'video_chat2'))
         try:
-            from utils.config import Config
-            from utils.easydict import EasyDict
-            from models import VideoChat2_it_hd_mistral
-            from dataset.hd_utils import HD_transform_padding, HD_transform_no_padding
+            from video_chat2.utils.config import Config
+            from video_chat2.utils.easydict import EasyDict
+            sys.path.append('/home/stud/xingyu/Ask_Anything')
+            from video_chat2.models.videochat_mistra.videochat2_it_hd_mistral import VideoChat2_it_hd_mistral
+            from video_chat2.dataset.hd_utils import HD_transform_padding, HD_transform_no_padding
         except Exception as err:
             logging.critical(
                 'Please first install VideoChat2 and set the root path to use VideoChat2, '

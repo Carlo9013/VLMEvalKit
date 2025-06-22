@@ -1,7 +1,9 @@
 import json
 import os
 import subprocess
-
+import pprint
+import sys
+sys.path.append('/home/stud/xingyu/Ask_Anything')
 
 # GET the number of GPUs on the node without importing libs like torch
 def get_gpu_list():
@@ -188,6 +190,10 @@ You can launch the evaluation by setting either --data and --model or --config.
 
 
 def main():
+    env_vars = os.environ
+    print("**********************************************************************") 
+    pprint.pprint(env_vars)
+    print("**********************************************************************") 
     logger = get_logger('RUN')
     args = parse_args()
     use_config, cfg = False, None
@@ -224,10 +230,15 @@ def main():
             timeout=datetime.timedelta(seconds=int(os.environ.get('DIST_TIMEOUT', 3600)))
         )
 
+    model_name = args.model[0]
+    nframe = cfg['model'][model_name]['nframe']
+    # fps = cfg['model'][model_name]['fps']
+    
     for _, model_name in enumerate(args.model):
         model = None
         date, commit_id = timestr('day'), githash(digits=8)
-        eval_id = f"T{date}_G{commit_id}"
+        eval_id = f"T{date}_G{commit_id}_{nframe}frames"
+        # eval_id = f"T{date}_G{commit_id}_{fps}fps"
 
         pred_root = osp.join(args.work_dir, model_name, eval_id)
         pred_root_meta = osp.join(args.work_dir, model_name)

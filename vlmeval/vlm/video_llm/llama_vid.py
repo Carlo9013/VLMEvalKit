@@ -10,12 +10,16 @@ from ...smp import isimg, listinstr, load, dump, download_file
 from ...dataset import DATASET_TYPE
 from decord import VideoReader, cpu
 from huggingface_hub import snapshot_download
+sys.path.append('/home/stud/xingyu/LLaMA_VID')
 
 
 def load_video(video_path, setting_fps):
     vr = VideoReader(video_path, ctx=cpu(0))
     total_frame_num = len(vr)
     fps = round(vr.get_avg_fps())
+    if fps == 0:
+        print(f"⚠️ Warning: Video {video_path} has 0 FPS. Defaulting to 1 FPS.")
+        fps = 1
     frame_idx = [i for i in range(0, total_frame_num, int(fps / setting_fps))]
     spare_frames = vr.get_batch(frame_idx).asnumpy()
     return spare_frames

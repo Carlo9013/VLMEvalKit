@@ -151,8 +151,10 @@ class Qwen2VLChat(Qwen2VLPromptMixin, BaseModel):
         max_pixels: int | None = None,
         total_pixels: int | None = None,
         max_new_tokens=2048,
-        top_p=0.001,
-        top_k=1,
+        # top_p=0.001,
+        top_p=None,
+        # top_k=1,
+        top_k=None,
         temperature=0.01,
         repetition_penalty=1.0,
         use_custom_prompt: bool = True,
@@ -175,6 +177,7 @@ class Qwen2VLChat(Qwen2VLPromptMixin, BaseModel):
             top_k=top_k,
             temperature=temperature,
             repetition_penalty=repetition_penalty,
+            do_sample=False,
         )
         self.system_prompt = system_prompt
         self.verbose = verbose
@@ -257,7 +260,8 @@ class Qwen2VLChat(Qwen2VLPromptMixin, BaseModel):
             self.device = 'cuda'
         else:
             self.model = MODEL_CLS.from_pretrained(
-                model_path, torch_dtype='auto', device_map="auto", attn_implementation='flash_attention_2'
+                # model_path, torch_dtype='auto', device_map="auto", attn_implementation='flash_attention_2'
+                model_path, torch_dtype=torch.float16, device_map={"": 0}, attn_implementation='eager'
             )
             self.model.eval()
 
@@ -431,8 +435,43 @@ class Qwen2VLChat(Qwen2VLPromptMixin, BaseModel):
             inputs = self.processor(text=text, images=images,audio=audios, videos=videos, padding=True, return_tensors='pt',use_audio_in_video=self.use_audio_in_video)  # noqa: E501
         else:
             images, videos = process_vision_info([messages])
+            if images:
+                for i, img in enumerate(images):
+                    if isinstance(img, torch.Tensor):
+                        print(f"[Image {i}] Tensor shape: {img.shape}")  # (C, H, W)
+                    else:
+                        print(f"[Image {i}] Type: {type(img)}")
+
+            if videos:
+                resized_videos = []
+                for i, vid in enumerate(videos):
+                    if isinstance(vid, torch.Tensor):
+                        print(f"[Video {i}] Tensor shape: {vid.shape}")  # (T, C, H, W)
+                        # Resize logic for video inputs
+                        T, C, H, W = vid.shape
+                        if H > 350 and W > 350:
+                            scale = 0.6
+                            new_H = int(H * scale)
+                            new_W = int(W * scale)
+                            vid = torch.nn.functional.interpolate(
+                                vid, size=(new_H, new_W), mode='bilinear', align_corners=False
+                            )
+                            
+                            if vid.max() > 1.0:
+                                vid = vid / 255.0
+                                
+                            vid = vid.to(dtype=torch.float16)
+
+                            
+                            print(f"[Video {i}] Resized to: {(T, C, new_H, new_W)}")
+                    else:
+                        print(f"[Video {i}] Type: {type(vid)}")
+                    resized_videos.append(vid)
+                videos = resized_videos         
+
             inputs = self.processor(text=text, images=images, videos=videos, padding=True, return_tensors='pt')  # noqa: E501
         inputs = inputs.to('cuda')
+        # inputs = inputs.to('cuda:0')
 
         if listinstr(['omni'], self.model_path.lower()):
             self.generate_kwargs['use_audio_in_video'] = self.use_audio_in_video
